@@ -1,14 +1,14 @@
 # Facebook 2 - Sistema de Login
 
-Este projeto é uma implementação de um sistema de login front-end. O objetivo é demonstrar como escolhas de design e feedback visual podem criar uma experiência de usuário (UX) robusta sem a necessidade de um backend complexo.
+Este projeto é uma implementação de um sistema de login front-end. O objetivo é demonstrar como escolhas de design e feedback visual podem criar uma experiência de usuário robusta sem a necessidade de um backend complexo.
 
 - Como Executar
 
-    Baixe o código (ou copie o bloco acima).
+    Baixe o código.
 
     Salve como index.html.
 
-    Abra o arquivo em qualquer navegador moderno (Chrome, Firefox, Edge).
+    Abra o arquivo em qualquer navegador moderno.
 
     Credenciais para teste:
 
@@ -16,24 +16,24 @@ Este projeto é uma implementação de um sistema de login front-end. O objetivo
         Senha: 1234
 
 ### Metas de Usabilidade:
-- Fácil de lembrar (Learnability):
+- Fácil de lembrar:
 
         * Utiliza o padrão universal de dois campos (usuário/senha).
         * Os rótulos (labels) flutuam, garantindo que o usuário sempre saiba o que está preenchendo, mesmo após clicar no campo.
 
-- Fácil de entender (Understandability):
+- Fácil de entender:
 
         * Interface limpa, sem distrações.
         * Botão de ação com texto claro ("Iniciar Conexão").
         * Feedback de erro explícito ("Credenciais Inválidas").
 
-- Útil (Utility):
+- Útil:
 
         * Cumpre a função de restringir acesso (simulado).
 
         * Permite visualizar a senha (toggle), útil para evitar erros de digitação.
 
-- Seguro (Percepção do Usuário):
+- Seguro:
 
         * A senha é ocultada por padrão (asteriscos).
         * Existe um "delay" artificial de 1.5s.
@@ -61,7 +61,7 @@ Este projeto é uma implementação de um sistema de login front-end. O objetivo
         * Transições suaves (CSS transitions) em todos os elementos interativos.
         * A tela de sucesso preenche o card suavemente, dando uma sensação de conclusão.
 
-- Emocionalmente Adequado (Confiança):
+- Emocionalmente Adequado:
 
         * O design escuro e estruturado passa seriedade, apesar de ser temático. Não parece "infantil", mas sim uma ferramenta de controle.
 
