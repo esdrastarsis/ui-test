@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook 2</title>
+    <style>
+        :root {
+            --primary: #00f2ff;
+            --secondary: #0044ff;
+            --bg-dark: #0a0e17;
+            --glass: rgba(16, 26, 48, 0.85);
+            --error: #ff3366;
+            --success: #00ff88;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-dark);
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(0, 242, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 68, 255, 0.1) 0%, transparent 20%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+        .header p { font-size: 12px; color: #8a9bbd; margin-top: 5px; }
+
+        .input-group { position: relative; margin-bottom: 25px; }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 16px;
+            color: white;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #334466;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            font-size: 16px;
+            color: #8a9bbd;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus,
+        .input-group input:valid {
+            border-bottom-color: var(--primary);
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:valid ~ label {
+            top: -20px;
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            border: none;
+            border-radius: 5px;
+            color: #000;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        button:disabled {
+            background: #334466;
+            color: #8a9bbd;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .message-box {
+            height: 20px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .error { color: var(--error); text-shadow: 0 0 5px rgba(255, 51, 102, 0.5); }
+        .success { color: var(--success); text-shadow: 0 0 5px rgba(0, 255, 136, 0.5); }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake { animation: shake 0.3s ease-in-out; }
+
+        .loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,0.3);
+            border-radius: 50%;
+            border-top-color: #000;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .access-granted {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        .access-granted.active { opacity: 1; pointer-events: all; }
+
+        .icon-lock { font-size: 50px; color: var(--success); margin-bottom: 20px; }
+
+        .toggle-password {
+            position: absolute;
+            right: 0;
+            top: 10px;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 12px;
+            text-transform: uppercase;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container" id="loginCard">
+        <div class="header">
+            <h1>Facebook 2</h1>
+            <p>Identificação de usuário requerida</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="text" id="username" required autocomplete="off">
+                <label for="username">Nome de usuário</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" required>
+                <label for="password">Senha</label>
+                <span class="toggle-password" id="togglePass">Ver</span>
+            </div>
+
+            <button type="submit" id="submitBtn">
+                <span class="btn-text">Conectar</span>
+                <div class="loader"></div>
+            </button>
+        </form>
+
+        <div class="message-box" id="feedbackMsg"></div>
+
+        <div class="access-granted" id="successScreen">
+            <div class="icon-lock">🔓</div>
+            <h2 style="color: white; margin-bottom: 10px;">ACESSO CONCEDIDO</h2>
+            <p style="color: var(--success);">Bem-vindo, Comandante.</p>
+            <button onclick="location.reload()" style="margin-top: 20px; width: auto; padding: 10px 30px; background: transparent; border: 1px solid var(--success); color: var(--success);">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const feedbackMsg = document.getElementById('feedbackMsg');
+        const loginCard = document.getElementById('loginCard');
+        const loader = document.querySelector('.loader');
+        const btnText = document.querySelector('.btn-text');
+        const successScreen = document.getElementById('successScreen');
+        const togglePass = document.getElementById('togglePass');
+        const passwordInput = document.getElementById('password');
+
+        // Credenciais Simuladas
+        const MOCK_DB = {
+            user: "admin",
+            pass: "1234"
+        };
+
+        togglePass.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePass.textContent = type === 'password' ? 'Ver' : 'Ocultar';
+        });
+
+        // Função de Login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+
+            setLoading(true);
+            feedbackMsg.style.opacity = '0';
+
+            // Simula delay de rede (Evita ataques de força bruta rápidos)
+            setTimeout(() => {
+                validateLogin(user, pass);
+            }, 1500);
+        });
+
+        function setLoading(isLoading) {
+            if (isLoading) {
+                submitBtn.disabled = true;
+                btnText.style.display = 'none';
+                loader.style.display = 'block';
+            } else {
+                submitBtn.disabled = false;
+                btnText.style.display = 'block';
+                loader.style.display = 'none';
+            }
+        }
+
+        function validateLogin(user, pass) {
+            setLoading(false);
+
+            if (user.toLowerCase() === MOCK_DB.user && pass === MOCK_DB.pass) {
+                feedbackMsg.textContent = "Biometria Confirmada...";
+                feedbackMsg.className = "message-box success";
+                feedbackMsg.style.opacity = '1';
+
+                setTimeout(() => {
+                    successScreen.classList.add('active');
+                }, 800);
+            } else {
+                feedbackMsg.textContent = "ERRO: Credenciais Inválidas";
+                feedbackMsg.className = "message-box error";
+                feedbackMsg.style.opacity = '1';
+
+                loginCard.classList.add('shake');
+                setTimeout(() => loginCard.classList.remove('shake'), 300);
+
+                document.getElementById('password').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
